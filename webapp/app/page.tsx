@@ -158,6 +158,14 @@ export default function Home() {
             <p className="text-xs text-gray-400 dark:text-gray-500">
               Note: True RAR files require the Python script. Most CBR files are ZIP-based and work here.
             </p>
+            <div className="mt-4">
+              <a
+                href="/download-script"
+                className="inline-flex items-center text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+              >
+                📥 Having issues with large files? Download the Python script to run locally
+              </a>
+            </div>
           </div>
         </div>
       </div>
