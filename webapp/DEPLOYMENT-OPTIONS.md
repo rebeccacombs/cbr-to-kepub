@@ -50,12 +50,14 @@ Since this is a **static Next.js site**, you can deploy it to many different pla
    - **Build command:** `npm run build`
    - **Build output directory:** `out` (NOT `webapp/out` - this is relative to root directory)
    - **Root directory:** `webapp`
+   - **Deploy command:** `npm run deploy` (uses wrangler pages deploy)
    - **Environment variables:** None needed
-6. **IMPORTANT:** Make sure there is NO custom deploy command set. Cloudflare Pages should automatically deploy the `out` directory.
+6. **Note:** The deploy command uses `wrangler pages deploy` which is the correct command for Cloudflare Pages static sites.
 7. Deploy!
 
 **Troubleshooting:**
-- If you see "Missing entry-point to Worker script" error, go to your project settings → Builds & deployments → and make sure there's NO custom deploy command
+- If you see "Missing entry-point to Worker script" error, make sure your deploy command is `npm run deploy` (not `npx wrangler deploy`)
+- The deploy command in `package.json` uses `wrangler pages deploy` which is correct for Pages (not Workers)
 - The build output directory should be `out` (relative to the root directory, which is `webapp`)
 - If using root directory `webapp`, the output path is automatically `webapp/out`, so set output directory to just `out`
 

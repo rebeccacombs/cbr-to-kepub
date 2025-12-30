@@ -17,13 +17,15 @@ Executing user deploy command: npx wrangler deploy
 2. Click on **Pages** in the left sidebar
 3. Click on your project name
 
-### Step 2: Remove Deploy Command
+### Step 2: Set Correct Deploy Command
 
 1. Click on **Settings** tab (at the top)
 2. Scroll down to **Builds & deployments** section
 3. Look for **"Deploy command"** field
-4. **DELETE everything in that field** - it should be completely empty
+4. Set it to: `npm run deploy`
 5. Click **Save** at the bottom
+
+**Note:** The deploy command uses `wrangler pages deploy` which is the correct command for Cloudflare Pages static sites.
 
 ### Step 3: Verify Build Settings
 
@@ -32,7 +34,7 @@ While you're in Settings, make sure:
 - **Build command:** `npm run build`
 - **Build output directory:** `out` (NOT `webapp/out`)
 - **Root directory:** `webapp`
-- **Deploy command:** (should be EMPTY - this is the key!)
+- **Deploy command:** `npm run deploy` (uses wrangler pages deploy)
 
 ### Step 4: Redeploy
 
@@ -44,7 +46,7 @@ OR just push a new commit to trigger a fresh build.
 
 ## Why This Happens
 
-Cloudflare Pages sometimes auto-detects or has a default deploy command set. For static sites, you should **NOT** have a deploy command - Cloudflare Pages automatically deploys whatever is in the output directory after the build completes.
+Cloudflare Pages needs the correct deploy command. The default `npx wrangler deploy` is for Workers, not Pages. Use `npm run deploy` which runs `wrangler pages deploy` - the correct command for static sites.
 
 ## Still Not Working?
 
