@@ -31,30 +31,33 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## Deployment to Vercel
+## Deployment
 
-### Option 1: Deploy via GitHub
+This is a **static Next.js site** that can be deployed to many platforms. See **[DEPLOYMENT-OPTIONS.md](./DEPLOYMENT-OPTIONS.md)** for a complete guide.
 
-1. Push this repository to GitHub
-2. Go to [vercel.com](https://vercel.com)
-3. Import your repository
-4. Set **Root Directory** to `webapp`
-5. Vercel will automatically detect Next.js and deploy
+### Quick Options:
 
-### Option 2: Deploy via Vercel CLI
+1. **Cloudflare Pages** (Recommended - Best free tier)
+   - Connect GitHub repo
+   - Build command: `npm run build`
+   - Output directory: `out`
+   - Root directory: `webapp`
 
-1. Install Vercel CLI:
-   ```bash
-   npm i -g vercel
-   ```
+2. **Netlify** (Easiest - Similar to Vercel)
+   - Connect GitHub repo
+   - Build command: `npm run build`
+   - Publish directory: `out`
+   - Base directory: `webapp`
 
-2. Deploy:
-   ```bash
-   cd webapp
-   vercel
-   ```
+3. **Vercel** (Original choice)
+   - Connect GitHub repo
+   - Root Directory: `webapp`
+   - Framework Preset: Next.js (auto-detected)
 
-3. Follow the prompts to link your project
+4. **GitHub Pages** (Free, requires GitHub Actions)
+   - See `DEPLOYMENT-OPTIONS.md` for setup
+
+All platforms work the same since this is a static export!
 
 ## How It Works
 
