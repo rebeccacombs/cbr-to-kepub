@@ -50,10 +50,11 @@ Since this is a **static Next.js site**, you can deploy it to many different pla
    - **Build command:** `npm run build`
    - **Build output directory:** `out` (NOT `webapp/out` - this is relative to root directory)
    - **Root directory:** `webapp`
-   - **Deploy command:** (leave EMPTY - Cloudflare Pages deploys automatically)
+   - **Deploy command:** `npm run deploy` (simple verification command)
    - **Environment variables:** None needed
-6. **IMPORTANT:** Leave the deploy command **EMPTY**. Cloudflare Pages automatically deploys the output directory after the build completes. Using `wrangler pages deploy` requires authentication and will fail.
-7. Deploy!
+6. **Deploy command:** Set to `npm run deploy` (a simple verification command that confirms the output exists)
+7. Cloudflare Pages will automatically deploy the `out` directory after the build completes
+8. Deploy!
 
 **Troubleshooting:**
 - If you see "Authentication error" or "Missing entry-point" errors, **remove the deploy command** - leave it empty

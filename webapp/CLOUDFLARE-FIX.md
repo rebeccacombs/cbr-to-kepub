@@ -17,15 +17,15 @@ Executing user deploy command: npx wrangler deploy
 2. Click on **Pages** in the left sidebar
 3. Click on your project name
 
-### Step 2: Remove Deploy Command
+### Step 2: Set Deploy Command
 
 1. Click on **Settings** tab (at the top)
 2. Scroll down to **Builds & deployments** section
 3. Look for **"Deploy command"** field
-4. **DELETE everything in that field** - leave it completely empty
+4. Set it to: `npm run deploy`
 5. Click **Save** at the bottom
 
-**Important:** Cloudflare Pages automatically deploys the output directory after the build completes. You do NOT need a deploy command - in fact, it causes authentication errors.
+**Note:** Since Cloudflare Pages requires a deploy command, we use a simple command that verifies the output exists. Cloudflare Pages will still automatically deploy the `out` directory after the build completes.
 
 ### Step 3: Verify Build Settings
 
@@ -34,7 +34,7 @@ While you're in Settings, make sure:
 - **Build command:** `npm run build`
 - **Build output directory:** `out` (NOT `webapp/out`)
 - **Root directory:** `webapp`
-- **Deploy command:** (should be EMPTY - Cloudflare Pages deploys automatically)
+- **Deploy command:** `npm run deploy` (simple verification command)
 
 ### Step 4: Redeploy
 
@@ -46,9 +46,9 @@ OR just push a new commit to trigger a fresh build.
 
 ## Why This Happens
 
-Cloudflare Pages automatically deploys the output directory after the build completes. You should **NOT** have a deploy command set. If you try to use `wrangler pages deploy`, it requires API token authentication which isn't available in the build environment and causes errors.
+Cloudflare Pages requires a deploy command, but `wrangler pages deploy` needs API token authentication which isn't available in the build environment. 
 
-**The solution:** Leave the deploy command empty. Cloudflare Pages will automatically deploy your `out` directory.
+**The solution:** Use `npm run deploy` which runs a simple verification command. Cloudflare Pages will still automatically deploy your `out` directory after the build completes - the deploy command just needs to exist and succeed.
 
 ## Still Not Working?
 
