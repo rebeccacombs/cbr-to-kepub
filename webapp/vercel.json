@@ -1,6 +1,6 @@
 {
   "functions": {
-    "app/api/convert/route.ts": {
+    "app/api/convert/**": {
       "maxDuration": 300
     }
   }
