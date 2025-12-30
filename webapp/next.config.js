@@ -1,10 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    serverActions: {
-      bodySizeLimit: '500mb',
-    },
-  },
+  // No server-side processing - all client-side
 }
 
 module.exports = nextConfig

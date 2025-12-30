@@ -4,7 +4,7 @@
 
 ### Secrets & Credentials
 - ✅ **No hardcoded API keys or tokens**
-- ✅ **Environment variables properly used** (`process.env.BLOB_READ_WRITE_TOKEN`)
+- ✅ **No environment variables needed** (static site)
 - ✅ **No credentials in code or config files**
 - ✅ **`.env` files properly ignored in `.gitignore`**
 
@@ -12,6 +12,7 @@
 - ✅ All source code files are safe to commit
 - ✅ Configuration files contain no secrets
 - ✅ Documentation files are safe
+- ✅ Python script in `public/` is safe to serve
 
 ### Files NOT to Commit (already in .gitignore)
 - ✅ `node_modules/` - dependencies
@@ -26,38 +27,28 @@
 ```
 webapp/
 ├── app/                    # Next.js App Router
-│   ├── api/                # API routes
+│   ├── download-script/    # Download page
 │   ├── favicon.ico         # Favicon
 │   ├── globals.css         # Global styles
 │   ├── layout.tsx          # Root layout
 │   └── page.tsx            # Home page
-├── components/             # React components
-│   ├── ConversionStatus.tsx
-│   └── FileUpload.tsx
-├── lib/                    # Utility functions
-│   └── kepub-generator.ts
+├── public/                 # Static files
+│   └── cbr_to_kepub.py    # Python script for download
 ├── DEPLOY.md               # Deployment guide
 ├── README.md               # Main documentation
-├── VERCEL-BLOB-SETUP.md    # Blob storage setup
+├── SECURITY-REVIEW.md      # This file
 ├── .gitignore             # Git ignore rules
-├── .eslintignore          # ESLint ignore rules
 ├── next.config.js         # Next.js config
 ├── package.json           # Dependencies
-├── tsconfig.json          # TypeScript config
-└── vercel.json            # Vercel config
+└── tsconfig.json          # TypeScript config
 ```
 
 ### ✅ Good Practices
-- ✅ Clear separation of concerns (components, lib, app)
+- ✅ Clear separation of concerns
 - ✅ TypeScript for type safety
 - ✅ Proper Next.js App Router structure
-- ✅ Configuration files properly organized
-
-### 🔧 Optimizations Made
-1. **Removed unused dependency**: `node-stream-zip` (not used in code)
-2. **Enhanced `.gitignore`**: Added more patterns for better coverage
-3. **Added `.eslintignore`**: Exclude build/config files from linting
-4. **Created `.env.example`**: Template for environment variables
+- ✅ Static site (no serverless functions)
+- ✅ No server-side processing (no file size limits)
 
 ## 🚀 Ready for GitHub & Vercel
 
@@ -66,12 +57,13 @@ webapp/
 - ✅ All sensitive files in `.gitignore`
 - ✅ Dependencies are production-ready
 - ✅ Configuration files are safe
-- ✅ No debug code or console.logs with sensitive data
+- ✅ No server-side processing (no API routes)
 
 ### Deployment Notes
-- Environment variables (like `BLOB_READ_WRITE_TOKEN`) should be set in Vercel dashboard, not in code
-- The app works without Blob storage (optional feature)
-- All user data is processed in-memory or in temporary Blob storage (auto-cleaned)
+- This is a **static Next.js site** - no serverless functions
+- No environment variables needed
+- No file size limits (no file uploads)
+- All processing happens locally via downloaded Python script
 
 ## 📝 Recommendations
 
@@ -81,11 +73,11 @@ webapp/
    - Verify no `.env` files are tracked: `git status`
 
 2. **For Vercel deployment:**
-   - Set `BLOB_READ_WRITE_TOKEN` in Vercel dashboard (Settings → Environment Variables) if using Blob storage
-   - The app will work without it (uses in-memory processing)
+   - Set **Root Directory** to `webapp`
+   - Framework Preset: Next.js (auto-detected)
+   - No environment variables needed
 
 3. **Optional improvements:**
    - Add a LICENSE file
    - Consider adding a CONTRIBUTING.md if open-sourcing
    - Add a CHANGELOG.md for version tracking
-

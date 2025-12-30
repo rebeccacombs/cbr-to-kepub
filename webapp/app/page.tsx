@@ -1,127 +1,8 @@
 'use client';
 
-import { useState, useCallback } from 'react';
-import FileUpload from '@/components/FileUpload';
-import ConversionStatus from '@/components/ConversionStatus';
-import { createKEPUB, extractImagesFromFiles } from '@/lib/kepub-generator';
+import Link from 'next/link';
 
 export default function Home() {
-  const [status, setStatus] = useState<'idle' | 'uploading' | 'processing' | 'ready' | 'error'>('idle');
-  const [progress, setProgress] = useState(0);
-  const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
-  const [fileName, setFileName] = useState<string>('');
-  const [error, setError] = useState<string>('');
-
-  const handleFileSelect = useCallback(async (file: File) => {
-    if (!file.name.toLowerCase().endsWith('.cbr')) {
-      setError('Please upload a .cbr file');
-      setStatus('error');
-      return;
-    }
-
-    setStatus('uploading');
-    setProgress(0);
-    setError('');
-    setDownloadUrl(null);
-    setFileName(file.name);
-
-    try {
-      // Read file
-      const arrayBuffer = await file.arrayBuffer();
-      setProgress(20);
-      
-      const fileData = new Uint8Array(arrayBuffer);
-
-      // Detect archive type
-      const isZip = fileData.length >= 2 && fileData[0] === 0x50 && fileData[1] === 0x4B;
-      const isRar = fileData.length >= 4 && (
-        (fileData[0] === 0x52 && fileData[1] === 0x61 && fileData[2] === 0x72 && fileData[3] === 0x21) ||
-        (fileData[0] === 0x52 && fileData[1] === 0x41 && fileData[2] === 0x52 && fileData[3] === 0x20)
-      );
-
-      if (isRar) {
-        setError('True RAR files require the Python script. Most CBR files are ZIP-based and work here. Please visit /download-script to get the Python script for RAR files.');
-        setStatus('error');
-        return;
-      }
-
-      if (!isZip) {
-        setError('Unsupported file format. Please ensure your CBR file is a ZIP-based archive.');
-        setStatus('error');
-        return;
-      }
-
-      setProgress(30);
-      setStatus('processing');
-
-      // Extract ZIP file
-      const JSZip = (await import('jszip')).default;
-      const zip = await JSZip.loadAsync(fileData);
-      setProgress(40);
-
-      const files: { name: string; data: Uint8Array }[] = [];
-      const sortedEntries = Object.entries(zip.files).sort(([a], [b]) => {
-        return a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
-      });
-
-      for (const [filename, file] of sortedEntries) {
-        if (!file.dir) {
-          const data = await file.async('uint8array');
-          files.push({ name: filename, data });
-        }
-      }
-
-      setProgress(60);
-
-      if (files.length === 0) {
-        setError('No files found in archive');
-        setStatus('error');
-        return;
-      }
-
-      // Extract and sort images
-      const imageFiles = extractImagesFromFiles(files);
-      setProgress(70);
-
-      if (imageFiles.length === 0) {
-        setError('No image files found in archive');
-        setStatus('error');
-        return;
-      }
-
-      // Generate book title
-      const bookTitle = file.name.replace(/\.cbr$/i, '').replace(/\.rar$/i, '');
-      setProgress(80);
-
-      // Create KEPUB
-      const kepubData = await createKEPUB(bookTitle, imageFiles);
-      setProgress(90);
-
-      // Create download URL
-      const blob = new Blob([kepubData], { type: 'application/epub+zip' });
-      const url = URL.createObjectURL(blob);
-      setDownloadUrl(url);
-      setStatus('ready');
-      setProgress(100);
-
-    } catch (err: any) {
-      console.error('Conversion error:', err);
-      setError(err.message || 'Conversion failed. Make sure your file is a valid CBR archive.');
-      setStatus('error');
-    }
-  }, []);
-
-  const handleDownload = useCallback(() => {
-    if (downloadUrl) {
-      const link = document.createElement('a');
-      link.href = downloadUrl;
-      link.download = fileName.replace(/\.cbr$/i, '.kepub.epub');
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
-  }, [downloadUrl, fileName]);
-
   return (
     <main className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
       <div className="container mx-auto px-4 py-16">
@@ -134,30 +15,94 @@ export default function Home() {
               Convert your Comic Book RAR files to Kobo EPUB format
             </p>
             <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
-              ✨ 100% client-side • No file size limits • Your files never leave your computer
+              Preserves original image quality • Ready for your Kobo device
             </p>
           </div>
 
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8">
-            <FileUpload onFileSelect={handleFileSelect} disabled={status === 'uploading' || status === 'processing'} />
-            
-            <ConversionStatus
-              status={status}
-              progress={progress}
-              error={error}
-              downloadUrl={downloadUrl}
-              fileName={fileName}
-              onDownload={handleDownload}
-            />
+            <div className="text-center space-y-6">
+              <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-blue-100 dark:bg-blue-900/30 mb-4">
+                <svg
+                  className="w-10 h-10 text-blue-600 dark:text-blue-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  />
+                </svg>
+              </div>
+
+              <div>
+                <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">
+                  Download the Python Script
+                </h2>
+                <p className="text-gray-600 dark:text-gray-300 mb-6">
+                  Get the Python script to convert CBR files to KEPUB format on your computer.
+                  Works with files of any size and handles true RAR archives.
+                </p>
+
+                <Link
+                  href="/download-script"
+                  className="inline-flex items-center px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-lg transition-colors text-lg"
+                >
+                  <svg
+                    className="w-6 h-6 mr-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                    />
+                  </svg>
+                  Download Python Script
+                </Link>
+              </div>
+
+              <div className="mt-8 pt-8 border-t border-gray-200 dark:border-gray-700">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+                  Features
+                </h3>
+                <ul className="text-left text-gray-600 dark:text-gray-300 space-y-2 max-w-md mx-auto">
+                  <li className="flex items-start">
+                    <svg className="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    Works with files of any size
+                  </li>
+                  <li className="flex items-start">
+                    <svg className="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    Handles true RAR archives
+                  </li>
+                  <li className="flex items-start">
+                    <svg className="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    Preserves original image quality
+                  </li>
+                  <li className="flex items-start">
+                    <svg className="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    Simple command-line interface
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
 
-          <div className="mt-8 text-center space-y-2">
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              💡 All processing happens in your browser - no server needed!
-            </p>
-            <p className="text-xs text-gray-400 dark:text-gray-500">
-              Note: Works with ZIP-based CBR files. For true RAR files, <a href="/download-script" className="text-blue-600 hover:underline">download the Python script</a>.
-            </p>
+          <div className="mt-8 text-center text-sm text-gray-500 dark:text-gray-400">
+            <p>💡 The script runs locally on your computer - no server uploads, no size limits!</p>
           </div>
         </div>
       </div>

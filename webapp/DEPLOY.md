@@ -26,12 +26,12 @@ git push -u origin main
 That's it! Your app will be live in ~2 minutes.
 
 ## Environment Variables
-None required for basic functionality.
+None required - this is a static site.
 
 ## Post-Deployment
 - Share the Vercel URL with your friend
-- They can drag & drop CBR files and download KEPUB files
-- No installation needed!
+- They can download the Python script and run it locally
+- No server-side processing - all conversion happens on their computer
 
 ## Troubleshooting
 
@@ -39,13 +39,10 @@ None required for basic functionality.
 - Make sure `package.json` is in the `webapp` directory
 - Check that Node.js version is 18+ in Vercel settings
 
-### Large Files Timeout
-- Vercel Hobby plan: 5-minute limit
-- Upgrade to Pro for 15-minute limit
-- Or use Python script locally for very large files
+### 404 Errors
+- Ensure **Root Directory** is set to `webapp` in Vercel project settings
+- Redeploy after changing root directory
 
-### RAR Files Don't Work
-- Many CBR files are actually ZIP (these work fine)
-- True RAR files need the Python script locally
-- The web app will show a helpful error message
-
+### Python Script Not Downloading
+- Verify `public/cbr_to_kepub.py` exists
+- Check that the file is committed to Git
