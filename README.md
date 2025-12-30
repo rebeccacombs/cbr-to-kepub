@@ -1,14 +1,14 @@
 # CBR to KEPUB Converter
 
-A Python script to convert Comic Book RAR (`.cbr`) files to Kobo EPUB (`.kepub`) format while preserving image quality.
+A simple Python script to convert Comic Book RAR (`.cbr`) files to Kobo EPUB (`.kepub`) format while preserving image quality.
 
 ## Features
 
-- Extracts images from CBR (RAR) archives
-- Creates properly formatted KEPUB files with Kobo-specific metadata
-- Preserves original image quality (no compression or resizing)
-- Automatically generates table of contents and navigation
-- Handles multiple image formats (JPG, PNG, GIF, BMP, WebP)
+- ✅ Extracts images from CBR (RAR) archives
+- ✅ Creates properly formatted KEPUB files with Kobo-specific metadata
+- ✅ Preserves original image quality (no compression or resizing)
+- ✅ Automatically generates table of contents and navigation
+- ✅ Handles multiple image formats (JPG, PNG, GIF, BMP, WebP)
 
 ## Requirements
 
@@ -36,15 +36,17 @@ The script requires `unrar` to extract RAR files:
 Convert a CBR file to KEPUB (output filename will be auto-generated):
 
 ```bash
-python cbr_to_kepub.py "Akira (35th Anniversary Edition) v01 (2017) (c2c) (Trite).cbr"
+python3 cbr_to_kepub.py "your-file.cbr"
 ```
+
+The output file will be created in the same directory as the input file with a `.kepub.epub` extension.
 
 ### Specify Output File
 
 Convert with a custom output filename:
 
 ```bash
-python cbr_to_kepub.py input.cbr output.kepub.epub
+python3 cbr_to_kepub.py input.cbr output.kepub.epub
 ```
 
 ## How It Works
@@ -83,3 +85,6 @@ The CBR file may be corrupted or may not contain any recognized image formats. S
 
 If Pillow is not installed, image validation is skipped. The script will still work, but won't verify image integrity.
 
+## License
+
+MIT
