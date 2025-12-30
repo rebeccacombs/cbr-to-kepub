@@ -17,15 +17,15 @@ Executing user deploy command: npx wrangler deploy
 2. Click on **Pages** in the left sidebar
 3. Click on your project name
 
-### Step 2: Set Correct Deploy Command
+### Step 2: Remove Deploy Command
 
 1. Click on **Settings** tab (at the top)
 2. Scroll down to **Builds & deployments** section
 3. Look for **"Deploy command"** field
-4. Set it to: `npm run deploy`
+4. **DELETE everything in that field** - leave it completely empty
 5. Click **Save** at the bottom
 
-**Note:** The deploy command uses `wrangler pages deploy` which is the correct command for Cloudflare Pages static sites.
+**Important:** Cloudflare Pages automatically deploys the output directory after the build completes. You do NOT need a deploy command - in fact, it causes authentication errors.
 
 ### Step 3: Verify Build Settings
 
@@ -34,7 +34,7 @@ While you're in Settings, make sure:
 - **Build command:** `npm run build`
 - **Build output directory:** `out` (NOT `webapp/out`)
 - **Root directory:** `webapp`
-- **Deploy command:** `npm run deploy` (uses wrangler pages deploy)
+- **Deploy command:** (should be EMPTY - Cloudflare Pages deploys automatically)
 
 ### Step 4: Redeploy
 
@@ -46,7 +46,9 @@ OR just push a new commit to trigger a fresh build.
 
 ## Why This Happens
 
-Cloudflare Pages needs the correct deploy command. The default `npx wrangler deploy` is for Workers, not Pages. Use `npm run deploy` which runs `wrangler pages deploy` - the correct command for static sites.
+Cloudflare Pages automatically deploys the output directory after the build completes. You should **NOT** have a deploy command set. If you try to use `wrangler pages deploy`, it requires API token authentication which isn't available in the build environment and causes errors.
+
+**The solution:** Leave the deploy command empty. Cloudflare Pages will automatically deploy your `out` directory.
 
 ## Still Not Working?
 

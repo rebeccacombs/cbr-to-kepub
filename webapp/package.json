@@ -7,8 +7,7 @@
     "build": "next build && cp _redirects out/_redirects 2>/dev/null || true",
     "start": "next start",
     "lint": "next lint",
-    "export": "next build",
-    "deploy": "npx wrangler pages deploy out --project-name=cbr-to-kepub"
+    "export": "next build"
   },
   "dependencies": {
     "next": "^14.2.0",
