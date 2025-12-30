@@ -80,10 +80,12 @@ export async function POST(request: NextRequest) {
     if (useBlobStorage) {
       try {
         // Upload original file to blob storage temporarily
+        // Convert File to Blob for @vercel/blob
         const timestamp = Date.now();
+        // Use the original File object directly
         const inputBlob = await put(
           `temp/input-${timestamp}-${file.name}`,
-          fileData,
+          file,
           {
             access: 'public',
             addRandomSuffix: false,
@@ -190,9 +192,10 @@ export async function POST(request: NextRequest) {
     if (useBlobStorage) {
       try {
         const timestamp = Date.now();
+        // Create Blob from Uint8Array (Blob accepts Uint8Array as BlobPart)
         const resultBlob = await put(
           `temp/output-${timestamp}-${bookTitle}.kepub.epub`,
-          Buffer.from(kepubData),
+          new Blob([kepubData as unknown as BlobPart], { type: 'application/epub+zip' }),
           {
             access: 'public',
             addRandomSuffix: false,
