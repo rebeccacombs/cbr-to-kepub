@@ -11,6 +11,7 @@
     "deploy": "echo 'Deployment handled automatically by Cloudflare Pages' && ls -la out/ | head -5"
   },
   "dependencies": {
+    "jszip": "^3.10.1",
     "next": "^14.2.0",
     "react": "^18.3.0",
     "react-dom": "^18.3.0"
