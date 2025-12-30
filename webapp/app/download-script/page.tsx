@@ -77,7 +77,7 @@ export default function DownloadScriptPage() {
                 </h2>
                 <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-4 mb-2 flex items-center justify-between">
                   <code className="text-sm text-gray-800 dark:text-gray-200">
-                    python3 cbr_to_kepub.py &quot;your-file.cbr&quot;
+                    python3 cbr_to_kepub.py {'"'}your-file.cbr{'"'}
                   </code>
                   <button
                     onClick={copyCommand}
@@ -87,7 +87,7 @@ export default function DownloadScriptPage() {
                   </button>
                 </div>
                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                  Replace <code className="bg-gray-100 dark:bg-gray-700 px-1 rounded">&quot;your-file.cbr&quot;</code> with the path to your CBR file.
+                  Replace <code className="bg-gray-100 dark:bg-gray-700 px-1 rounded">{'"'}your-file.cbr{'"'}</code> with the path to your CBR file.
                 </p>
               </div>
 
