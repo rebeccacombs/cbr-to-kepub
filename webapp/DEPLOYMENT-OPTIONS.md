@@ -46,11 +46,18 @@ Since this is a **static Next.js site**, you can deploy it to many different pla
 3. Click "Create a project" → "Connect to Git"
 4. Select your repository
 5. Configure:
-   - **Framework preset:** Next.js (Static HTML Export)
+   - **Framework preset:** Next.js (Static HTML Export) or "None" if not available
    - **Build command:** `npm run build`
-   - **Build output directory:** `out`
+   - **Build output directory:** `out` (NOT `webapp/out` - this is relative to root directory)
    - **Root directory:** `webapp`
-6. Deploy!
+   - **Environment variables:** None needed
+6. **IMPORTANT:** Make sure there is NO custom deploy command set. Cloudflare Pages should automatically deploy the `out` directory.
+7. Deploy!
+
+**Troubleshooting:**
+- If you see "Missing entry-point to Worker script" error, go to your project settings → Builds & deployments → and make sure there's NO custom deploy command
+- The build output directory should be `out` (relative to the root directory, which is `webapp`)
+- If using root directory `webapp`, the output path is automatically `webapp/out`, so set output directory to just `out`
 
 ---
 
