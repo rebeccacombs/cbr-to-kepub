@@ -136,6 +136,14 @@ export default function Home() {
             <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
               Preserves original image quality • Ready for your Kobo device
             </p>
+            <div className="mt-4 p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg inline-block">
+              <p className="text-sm text-yellow-800 dark:text-yellow-200">
+                ⚠️ <strong>Free tier limit:</strong> Files must be under 4.5 MB for server conversion
+              </p>
+              <p className="text-xs text-yellow-700 dark:text-yellow-300 mt-1">
+                For larger files, use the <a href="/browser-converter" className="underline font-semibold">browser-based converter</a> (no size limits!)
+              </p>
+            </div>
           </div>
 
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8">
@@ -161,15 +169,15 @@ export default function Home() {
             <div className="mt-4 space-y-2">
               <a
                 href="/browser-converter"
-                className="inline-flex items-center text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 block"
+                className="inline-flex items-center text-sm font-semibold text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 block bg-blue-50 dark:bg-blue-900/20 px-4 py-2 rounded-lg"
               >
-                🚀 Try browser-based converter (works with any file size, no server needed!)
+                🚀 <strong>Recommended:</strong> Browser-based converter (no file size limits, 100% client-side)
               </a>
               <a
                 href="/download-script"
                 className="inline-flex items-center text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 block"
               >
-                📥 Or download the Python script to run locally
+                📥 Or download the Python script to run locally (for true RAR files)
               </a>
             </div>
           </div>

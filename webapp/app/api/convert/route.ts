@@ -2,9 +2,12 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createKEPUB, extractImagesFromFiles } from '@/lib/kepub-generator';
 import { put, del } from '@vercel/blob';
 
-// Increase body size limit for large files
+// Note: Vercel free tier limits:
+// - Request body: 4.5 MB max
+// - Function duration: 10 seconds max (not 300)
+// - Memory: 1024 MB
 export const runtime = 'nodejs';
-export const maxDuration = 300; // 5 minutes for large files
+export const maxDuration = 10; // Free tier limit is 10 seconds
 
 // Check file type by magic bytes
 function detectArchiveType(fileData: Uint8Array): 'zip' | 'rar' | 'unknown' {
@@ -67,6 +70,17 @@ export async function POST(request: NextRequest) {
 
     if (!file.name.toLowerCase().endsWith('.cbr')) {
       return NextResponse.json({ error: 'File must be a .cbr file' }, { status: 400 });
+    }
+
+    // Check file size - Vercel free tier has 4.5 MB request body limit
+    const fileSizeMB = file.size / (1024 * 1024);
+    if (fileSizeMB > 4.5) {
+      return NextResponse.json(
+        { 
+          error: `File is too large (${fileSizeMB.toFixed(1)} MB). Vercel free tier has a 4.5 MB limit. Please use the browser-based converter at /browser-converter which has no size limits, or download the Python script to run locally.` 
+        },
+        { status: 413 }
+      );
     }
 
     // Read file data
