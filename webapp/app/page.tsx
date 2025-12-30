@@ -136,13 +136,16 @@ export default function Home() {
             <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
               Preserves original image quality • Ready for your Kobo device
             </p>
-            <div className="mt-4 p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg inline-block">
-              <p className="text-sm text-yellow-800 dark:text-yellow-200">
-                ⚠️ <strong>Free tier limit:</strong> Files must be under 4.5 MB for server conversion
+            <div className="mt-4 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg inline-block max-w-2xl">
+              <p className="text-sm text-blue-800 dark:text-blue-200 mb-2">
+                💡 <strong>Recommended:</strong> Use the <a href="/browser-converter" className="underline font-semibold">browser-based converter</a> for best results
               </p>
-              <p className="text-xs text-yellow-700 dark:text-yellow-300 mt-1">
-                For larger files, use the <a href="/browser-converter" className="underline font-semibold">browser-based converter</a> (no size limits!)
-              </p>
+              <ul className="text-xs text-blue-700 dark:text-blue-300 space-y-1 list-disc list-inside">
+                <li>No file size limits (works with any size)</li>
+                <li>No server memory limits</li>
+                <li>Faster processing (no server round-trip)</li>
+                <li>100% private (files never leave your computer)</li>
+              </ul>
             </div>
           </div>
 

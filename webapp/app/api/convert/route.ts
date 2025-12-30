@@ -46,10 +46,18 @@ async function extractZIPFile(fileData: Uint8Array): Promise<{ name: string; dat
     return a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
   });
 
+  // Process files with memory optimization
+  // Only keep image files in memory, discard others immediately
   for (const [filename, file] of sortedEntries) {
     if (!file.dir) {
-      const data = await file.async('uint8array');
-      files.push({ name: filename, data });
+      const ext = filename.toLowerCase().substring(filename.lastIndexOf('.'));
+      // Only process image files to save memory
+      if (['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'].includes(ext)) {
+        const data = await file.async('uint8array');
+        files.push({ name: filename, data });
+      }
+      // Explicitly delete non-image files from memory
+      delete zip.files[filename];
     }
   }
 
@@ -73,14 +81,21 @@ export async function POST(request: NextRequest) {
     }
 
     // Check file size - Vercel free tier has 4.5 MB request body limit
+    // Also consider memory limits (2GB on free tier, but processing large files can exceed this)
     const fileSizeMB = file.size / (1024 * 1024);
     if (fileSizeMB > 4.5) {
       return NextResponse.json(
         { 
-          error: `File is too large (${fileSizeMB.toFixed(1)} MB). Vercel free tier has a 4.5 MB limit. Please use the browser-based converter at /browser-converter which has no size limits, or download the Python script to run locally.` 
+          error: `File is too large (${fileSizeMB.toFixed(1)} MB). Vercel free tier has a 4.5 MB request limit and 2GB memory limit. Please use the browser-based converter at /browser-converter which has no size or memory limits, or download the Python script to run locally.` 
         },
         { status: 413 }
       );
+    }
+
+    // Warn about potential memory issues even for smaller files
+    // Large ZIP files with many images can still cause memory issues
+    if (fileSizeMB > 2) {
+      console.warn(`Large file detected (${fileSizeMB.toFixed(1)} MB) - may hit memory limits on free tier`);
     }
 
     // Read file data
